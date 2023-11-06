@@ -1,0 +1,66 @@
+----------------------------------------------------------
+Q1 Write a program non-recursive and recursive program to calculate Fibonacci numbers and analyze their time and space
+complexity.
+
+--without recursion
+import java.util.*;
+ 
+public class FibonacciSeries {
+    public static void main(String args[]) {
+        int terms, last = 1, secondLast = 0, current, i;
+ 
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter number of terms in Fibonacci Series");
+        terms = in.nextInt();
+ 
+        /*
+         *  Nth term = (N-1)th thrm + (N-2)th term;
+         */
+        for(i = 0; i < terms; i++){
+            if(i < 2){
+                current = i;
+            } else {
+                current = last + secondLast;
+                secondLast = last;
+                last = current;
+            }
+            System.out.print(current + " ");
+        }
+    }
+}
+
+Output
+Enter number of terms in Fibonacci Series
+10
+0 1 1 2 3 5 8 13 21 34
+
+--with recursion
+
+import java.util.*;
+ 
+public class FibonacciSeriesRecursion {
+    public static void main(String args[]) {
+        int terms, i;
+   
+       Scanner in = new Scanner(System.in);
+       System.out.println("Enter number of terms 
+           in Fibonacci Series");
+       terms = in.nextInt();
+ 
+       for(i = 0; i < terms; i++){
+           System.out.print(fibonacci(i) + " ");
+       }
+    }
+  
+    public static int fibonacci(int num){
+        /* Exit condition of recursion*/
+        if(num < 2)
+            return num;
+        return fibonacci(num - 1) + fibonacci(num - 2);
+    }
+}
+
+Output
+Enter number of terms in Fibonacci Series
+12
+0 1 1 2 3 5 8 13 21 34 55 89s

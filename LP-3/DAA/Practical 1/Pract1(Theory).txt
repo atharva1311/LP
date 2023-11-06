@@ -1,0 +1,29 @@
+
+
+1)The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones, usually starting with 0 and 1. The Fibonacci sequence begins as follows: 0, 1, 1, 2, 3, 5, 8, 13, 21, and so on. To calculate Fibonacci numbers, you can use both non-recursive (iterative) and recursive methods.
+
+
+
+2)Non-Recursive (Iterative) Approach Algorithm:
+
+Start with two integers a and b initialized to 0 and 1, respectively.
+Input the value of n, which represents the desired Fibonacci number.
+If n is less than or equal to 1, return n as the result.
+Initialize a loop from 2 to n (inclusive).
+In each iteration of the loop, do the following:
+a. Calculate the next Fibonacci number as the sum of a and b.
+b. Update the value of a to be the previous value of b.
+c. Update the value of b to be the calculated Fibonacci number.
+After the loop, the value of b will be the nth Fibonacci number.
+Return b as the result.
+
+
+3)Recursive Approach Algorithm:
+
+Define a function fibonacciRecursive(n) that takes an integer n as input.
+If n is less than or equal to 1, return n as the result (base case).
+Otherwise, recursively call the fibonacciRecursive function with n - 1 and n - 2 as arguments.
+Sum the results of the two recursive calls to get the nth Fibonacci number.
+Return the calculated Fibonacci number as the result.
+
+

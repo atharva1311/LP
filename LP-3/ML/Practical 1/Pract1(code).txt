@@ -1,0 +1,154 @@
+
+#1. Predict the price of the Uber ride from a given pickup point to the agreed drop-off location
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from sklearn.impute import SimpleImputer
+
+#1.******************************************************************** Pre-process the dataset.
+
+df = pd.read_csv("C:\\Users\\hp\\Downloads\\uber.csv")
+df.head()
+
+df.info()
+
+df.shape
+
+df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+
+df.dtypes
+
+df.describe()
+
+#***********************************************************************2. Identify outliers.
+
+# Define a function to detect outliers using the IQR method
+def detect_outliers_iqr(data, column):
+    Q1 = data[column].quantile(0.25)
+    Q3 = data[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    outliers = data[(data[column] < lower_bound) | (data[column] > upper_bound)]
+    return outliers
+
+# Specify the columns you want to check for outliers
+columns_to_check = ['fare_amount', 'pickup_longitude', 'pickup_latitude', 'dropoff_longitude', 'dropoff_latitude', 'passenger_count']
+
+# Create a DataFrame to store the outliers
+outliers_df = pd.DataFrame()
+
+# Detect outliers for each specified column and store them in the outliers_df
+for column in columns_to_check:
+    outliers = detect_outliers_iqr(df, column)
+    outliers_df = pd.concat([outliers_df, outliers])
+
+# Display the DataFrame containing outliers
+print(outliers_df)
+
+# Define the column for which you want to detect outliers
+column_name = "fare_amount"
+column = df[column_name]
+
+# Calculate the IQR for the specified column
+Q1 = column.quantile(0.25)
+Q3 = column.quantile(0.75)
+IQR = Q3 - Q1
+
+# Define the lower and upper bounds for outliers
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Detect and display the outliers in the specified column
+outliers = column[(column < lower_bound) | (column > upper_bound)]
+
+# Display the number of outliers, maximum, and minimum outlier values
+print("Number of outliers: " + str(len(outliers)))
+print("Max outlier value: " + str(outliers.max()))
+print("Min outlier value: " + str(outliers.min()))
+print("Outliers: \n", outliers)
+
+
+# Select only the numeric columns from your DataFrame
+numeric_columns = df.select_dtypes(include=[np.number])
+
+
+#************************************************************************3.Check the correlation.
+
+# Calculate the correlation matrix for the numeric columns
+correlation_matrix = numeric_columns.corr()
+
+# Set the figure size for the heatmap
+plt.figure(figsize=(10, 8))
+
+# Create a heatmap of the correlation matrix
+sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
+
+# Set the title of the plot
+plt.title("Correlation Matrix Heatmap")
+
+# Show the plot
+plt.show()
+
+
+#**************************************************4. Implement linear regression and random forest regression models.
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+
+X = df[['pickup_longitude', 'pickup_latitude', 'dropoff_longitude', 'dropoff_latitude', 'passenger_count']]
+y = df['fare_amount']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create an imputer to fill missing values with the mean
+imputer = SimpleImputer(strategy='mean')
+
+# Fit and transform the imputer on your feature data
+X_train_imputed = imputer.fit_transform(X_train)
+X_test_imputed = imputer.transform(X_test)
+
+# Create and fit the Linear Regression model on the imputed data
+linear_model = LinearRegression()
+linear_model.fit(X_train_imputed, y_train)
+linear_predictions = linear_model.predict(X_test_imputed)
+
+# Create a Random Forest Regression model
+random_forest_model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+# Fit the model to the training data
+random_forest_model.fit(X_train_imputed, y_train)
+
+# Make predictions on the test data
+random_forest_predictions = random_forest_model.predict(X_test_imputed)
+
+#*******************************************************************5. Evaluate the models and compare their respective scores like R2, RMSE, etc.
+# Calculate metrics for Linear Regression
+linear_rmse = np.sqrt(mean_squared_error(y_test, linear_predictions))
+linear_r2 = r2_score(y_test, linear_predictions)
+
+# Calculate metrics for Random Forest Regression
+random_forest_rmse = np.sqrt(mean_squared_error(y_test, random_forest_predictions))
+random_forest_r2 = r2_score(y_test, random_forest_predictions)
+
+print("Linear Regression RMSE:", linear_rmse)
+print("Linear Regression R-squared:", linear_r2)
+print("Random Forest RMSE:", random_forest_rmse)
+print("Random Forest R-squared:", random_forest_r2)
+
+test = pd.read_csv("C:\\Users\\hp\\Downloads\\uber.csv")
+test["pickup_datetime"] = pd.to_datetime(test["pickup_datetime"])
+test['day']=test['pickup_datetime'].apply(lambda x:x.day)
+test['hour']=test['pickup_datetime'].apply(lambda x:x.hour)
+test['month']=test['pickup_datetime'].apply(lambda x:x.month)
+test['year']=test['pickup_datetime'].apply(lambda x:x.year)
+test['weekday']=test['pickup_datetime'].apply(lambda x:calendar.day_name[x.weekday()])
+test.weekday =test.weekday.map({'Sunday':0,'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'Saturday':6})
+test.drop(['pickup_datetime'], axis = 1, inplace = True)
+
+test.head(5)
