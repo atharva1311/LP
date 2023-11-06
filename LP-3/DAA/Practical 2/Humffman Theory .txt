@@ -1,0 +1,52 @@
+Humffman Theory :
+
+1)Huffman encoding is a variable-length prefix coding algorithm used for lossless data compression. It uses a greedy strategy to assign shorter codes to more frequent symbols and longer codes to less frequent symbols. 
+
+
+algorithm :
+
+Calculate the frequency of each character in the input data.
+
+Build a priority queue (min-heap) with nodes for each character and its frequency.
+
+Build the Huffman tree by repeatedly merging the two nodes with the lowest frequencies until only one node remains.
+
+Assign binary codes to characters based on the tree's structure (left branches are "0," right branches are "1").
+
+Encode the input data by replacing characters with their Huffman codes.
+
+Decode the encoded message by traversing the Huffman tree from the root, using "0" for left branches and "1" for right branches to retrieve characters.
+
+Example :
+
+Input Data (Symbols): "abcdef"
+
+Frequency Count:
+
+Count the frequency of each symbol:
+Frequencies: 50, 10, 30, 5, 3, 2
+
+Create Nodes and Build Huffman Tree:
+
+     cba(80)
+    /      \
+ bdfe(20)   c(30)
+   /   \
+b(10)  dfe(10)
+      /     \
+     d(5)   fe(5)
+           /   \
+          f(2)  e(3)
+
+
+Assign Binary Codes:
+Traverse the Huffman tree to assign codes:
+a: 0
+b: 10
+c: 11
+d: 100
+e: 101
+f: 110
+
+Input Data: "a b c d e f"
+Encoded Data: "011011001001010110"

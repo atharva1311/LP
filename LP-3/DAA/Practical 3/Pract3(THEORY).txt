@@ -1,0 +1,55 @@
+FRACTIONAL KNAPSACK THEORY :
+
+1)The fractional knapsack algorithm is used to find the maximum value that can be obtained in a knapsack when items can be taken partially (i.e., fractions of items are allowed). 
+
+2)We are given n items with weight and value of each item and the capacity of knapsack we need to put these items in knapsack such that final value of items in knapsack is maximum.
+
+what is greedy method
+
+The greedy method, or greedy algorithm, is a problem-solving strategy in computer science and mathematics. It is an approach to solving problems that involves making the locally optimal choice at each step
+
+Here are the steps of the algorithm in a concise form :
+
+1.Define a class Item to represent each item with attributes profit and weight.
+
+2.Create a function fractionalKnapsack(w, arr) that takes the knapsack capacity w and a list of Item objects arr.
+
+3.Sort the arr in descending order based on the profit-to-weight ratio of each item. This helps prioritize items with higher ratios.
+
+4.Initialize a variable finalValue to 0 to keep track of the total value in the knapsack.
+
+5.Iterate through the sorted items in the arr.
+
+6.For each item:
+      a. Check if there is enough capacity w to include the entire item in the knapsack.
+      b. If there is enough capacity, add the entire profit of the item to finalValue, and reduce the remaining capacity w accordingly.
+      c. If there is not enough capacity for the entire item, calculate the fraction of the item that can fit into the knapsack based on          the remaining capacity and the item's weight.
+      d. Add the fraction of the item's profit to finalValue.
+
+7.Break the loop when the knapsack is full (i.e., w becomes 0 or no more items can fit).
+
+8.Return finalValue as the maximum value that can be obtained in the knapsack.
+
+#example :
+
+Enter no of items
+5
+Enter the weights of each items
+7
+4
+6
+5
+6
+Enter the values of each items
+21
+24
+12
+40
+30
+Enter maximum volume of knapsack :
+20
+Quantity of item number: 4 added is 5
+Quantity of item number: 2 added is 4
+Quantity of item number: 5 added is 6
+Quantity of item number: 1 added is 5
+The total profit is 109.0

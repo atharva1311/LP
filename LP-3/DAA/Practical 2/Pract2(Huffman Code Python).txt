@@ -1,0 +1,82 @@
+Q2 Write a program to implement Huffman Encoding using a greedy strategy.
+
+#import heapq: Imports the Python standard library module heapq, which provides
+# heap queue (priority queue) functionality.
+
+import heapq
+
+# Define a class to represent nodes in the Huffman tree
+class node:
+    def __init__(self, freq, symbol, left=None, right=None):
+        self.freq = freq
+        self.symbol = symbol
+        self.left = left
+        self.right = right
+        self.huff = ""
+
+#This is a special method that defines how nodes should be compared when using the 
+#less-than operator (<). It's used for ordering nodes in the priority queue (heap) 
+#based on their frequencies.
+
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+# Function to build the Huffman tree
+def buildHuffmanTree(chars, freqs):
+    nodes = []
+
+    # Create nodes for each character and its frequency and push them into a heap
+    for i in range(len(chars)):
+        heapq.heappush(nodes, node(freqs[i], chars[i]))
+
+    while len(nodes) > 1:
+        # Pop two nodes with the lowest frequencies
+        left = heapq.heappop(nodes)
+        right = heapq.heappop(nodes)
+        left.huff = "0"  # Assign "0" to the left child
+        right.huff = "1"  # Assign "1" to the right child
+        # Create a new node with the combined frequency and left and right children
+        newnode = node(left.freq + right.freq, left.symbol + right.symbol, left, right)
+        # Push the new node back into the heap
+        heapq.heappush(nodes, newnode)
+
+    # Return the root of the Huffman tree
+    return nodes[0]
+
+# Function to encode a character using Huffman code
+def encodeHuffman(root, character):
+    def findHuffmanCode(node, character, code=""):
+        if node is None:
+            return None
+        if node.symbol == character:
+            return code
+        left_code = findHuffmanCode(node.left, character, code + "0")
+        if left_code is not None:
+            return left_code
+        return findHuffmanCode(node.right, character, code + "1")
+
+    # Start the search for the Huffman code from the root of the tree
+    return findHuffmanCode(root, character, "")
+
+# Taking input characters and frequencies from the user
+n = int(input("Enter the number of characters: "))
+chars = []
+freqs = []
+
+for i in range(n):
+    char = input(f"Enter character {i + 1}: ")
+    freq = int(input(f"Enter frequency for character {char}: "))
+    chars.append(char)
+    freqs.append(freq)
+
+original_string = ''.join(chars)  # Original character string
+
+root = buildHuffmanTree(chars, freqs)  # Build the Huffman tree
+
+encoded_string = ""
+for char in chars:
+    encoded_string += encodeHuffman(root, char)  # Encode each character
+
+# Print the original and encoded strings
+print("Original String:", original_string)
+print("Encoded String:", encoded_string)

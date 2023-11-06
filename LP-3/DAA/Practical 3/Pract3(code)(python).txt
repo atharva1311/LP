@@ -1,0 +1,56 @@
+Q3.  Write a program to solve a fractional Knapsack problem using a greedy method
+
+class Item:
+    def __init__(self, profit, weight):
+        # This is a constructor for the 'Item' class. It initializes an 'Item' object with 'profit' and 'weight' attributes.
+        self.profit = profit
+        self.weight = weight
+
+def fractionalKnapsack(w, arr):
+    # This function implements the fractional knapsack algorithm to find the maximum value in a knapsack.
+    
+    # Sort the 'arr' (list of items) in descending order of their profit-to-weight ratio.
+    arr.sort(key=lambda x: x.profit/x.weight, reverse=True)
+    
+    # Initialize a variable to store the final value in the knapsack.
+    finalValue = 0.0
+    
+    # Iterate through each 'item' in the sorted 'arr'.
+    for item in arr:
+        # Check if there is enough capacity 'w' to include the entire 'item' in the knapsack.
+        if w >= item.weight:
+            # Add the entire profit of the 'item' to the final value.
+            finalValue += item.profit
+            # Reduce the remaining capacity of the knapsack.
+            w -= item.weight
+        else:
+            # If there is not enough capacity to include the entire 'item', add a fraction of its profit to the final value.
+            # The fraction is determined by the remaining capacity and the weight of the 'item'.
+            finalValue += item.profit * (w/item.weight)
+            # Since the knapsack is now full, break out of the loop.
+            break
+    
+    # Return the final calculated value in the knapsack.
+    return finalValue
+
+if __name__ == "__main__":
+    # This block of code is executed if the script is run as the main program.
+    
+    # Get the number of items from the user.
+    n = int(input("Enter the number of items-\n"))
+    
+    # Initialize an empty list 'arr' to store the 'Item' objects.
+    arr = []
+    
+    # Iterate 'n' times to collect 'profit' and 'weight' values for each item from the user.
+    for i in range(n):
+        profit = int(input("Enter profit of item " + str(i + 1) + "-\n"))
+        weight = int(input("Enter weight of item " + str(i + 1) + "-\n"))
+        # Create an 'Item' object and append it to the 'arr' list.
+        arr.append(Item(profit, weight))
+    
+    # Get the capacity of the knapsack from the user.
+    w = int(input("Enter the capacity of the knapsack-\n"))
+    
+    # Call the 'fractionalKnapsack' function with the capacity and the list of items, and print the result.
+    print("Maximum value in the knapsack: ", fractionalKnapsack(w, arr))
